@@ -347,15 +347,20 @@ namespace rude
 		{
 			// forward to load(filename)
 			//
-			return load(d_configfile.c_str());
+			return load(d_configfile.c_str(), true);
 		}
 
-		bool ConfigImpl::load(const char* filename)
+		bool ConfigImpl::load(const char* filename, bool fromLoad)
 		{
 			if (filename && filename[0])
 			{
-				d_configfile = filename;
-				std::ifstream infile(filename);
+				if (!fromLoad)
+				{
+					d_configfile = "\\work\\";
+					d_configfile += filename;
+				}
+
+				std::ifstream infile(d_configfile);
 
 				if (infile)
 				{
@@ -398,14 +403,23 @@ namespace rude
 		{
 			// forward to save(filename)
 			//
-			return save(d_configfile.c_str());
+			return save(d_configfile.c_str(), true);
 		}
 
-		bool ConfigImpl::save(const char* filename)
+		bool ConfigImpl::save(const char* filename, bool fromSave)
 		{
 			if (filename && filename[0] != 0)
 			{
-				ofstream outstream(filename);
+				string configfile;
+
+				if (fromSave) configfile = filename;
+				else
+				{
+					configfile = "\\work\\";
+					configfile += filename;
+				}
+
+				ofstream outstream(configfile);
 
 				if (outstream)
 				{
@@ -421,10 +435,8 @@ namespace rude
 					return false;
 				}
 			}
-			else
-			{
-				return save(std::cout);
-			}
+			
+			return save(std::cout);
 		}
 
 		bool ConfigImpl::save(std::ostream& outstream)

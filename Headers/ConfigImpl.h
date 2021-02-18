@@ -101,11 +101,11 @@ namespace rude
 			// LOADING & SAVING & CLEARING
 			//	
 			bool load();
-			bool load(const char* filename);
+			bool load(const char* filename, bool fromLoad = false);
 			bool load(std::istream&);
 
 			bool save();
-			bool save(const char* filename);
+			bool save(const char* filename, bool fromSave = false);
 			bool save(std::ostream&);
 
 			void clear();
